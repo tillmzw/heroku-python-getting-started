@@ -1,5 +1,6 @@
+from django.conf import settings 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from .models import Greeting
 
@@ -7,6 +8,10 @@ from .models import Greeting
 def index(request):
     # return HttpResponse('Hello from Python!')
     return render(request, "index.html")
+
+
+def host(request):
+    return JsonResponse({"hostname": settings.HOST_NAME})
 
 
 def db(request):
