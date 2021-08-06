@@ -21,6 +21,8 @@ class SimpleTest(TestCase):
         response = index(request)
 
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "index")
+
 
     def test_host(self):
         request = self.factory.get("/host")

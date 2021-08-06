@@ -3,13 +3,18 @@ import random
 
 from django.conf import settings 
 from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
 
 from .models import Greeting
 
 # Create your views here.
 def index(request):
-    return JsonResponse({}) 
+    return JsonResponse({
+        "index": reverse("index"),
+        "host": reverse("host"),
+        "db": reverse("db")
+    }) 
 
 
 def host(request):
