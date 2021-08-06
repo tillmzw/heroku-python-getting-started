@@ -9,8 +9,7 @@ from .models import Greeting
 
 # Create your views here.
 def index(request):
-    # return HttpResponse('Hello from Python!')
-    return render(request, "index.html")
+    return HttpResponse(200) 
 
 
 def host(request):
