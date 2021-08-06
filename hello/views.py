@@ -1,3 +1,6 @@
+import os
+import random
+
 from django.conf import settings 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
@@ -11,7 +14,18 @@ def index(request):
 
 
 def host(request):
-    return JsonResponse({"hostname": settings.HOST_NAME})
+    try:
+        lower_bound = int(os.environ.get("LOWER_RANDOM", 97))
+        upper_bound = int(os.environ.get("UPPER_RANDOM", 97+25))
+        randint = random.randint(lower_bound, upper_bound)
+        random_char = chr(randint)
+    except (TypeError, ValueError):
+        random_char = "💩"
+        
+    return JsonResponse({
+        "hostname": settings.HOST_NAME,
+        "random_char": random_char 
+    })
 
 
 def db(request):
