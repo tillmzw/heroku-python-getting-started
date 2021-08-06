@@ -23,7 +23,6 @@ class SimpleTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "index")
 
-
     def test_host(self):
         request = self.factory.get("/host")
         request.user = AnonymousUser()
@@ -37,7 +36,7 @@ class SimpleTest(TestCase):
         request = self.factory.get("/host")
         request.user = AnonymousUser()
         response = db(request)
-    
+
         self.assertEqual(Greeting.objects.count(), 1)
 
         self.assertContains(response, "count")
