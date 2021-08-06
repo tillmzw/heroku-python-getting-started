@@ -32,6 +32,11 @@ def db(request):
     greeting = Greeting()
     greeting.save()
 
-    greetings = Greeting.objects.all()
+    greetings_serialized = [g.serialize() for g in Greeting.objects.all()]
 
-    return render(request, "db.html", {"greetings": greetings})
+    resp = {
+        'count': len(greetings_serialized),
+        'data': greetings_serialized
+    }
+
+    return JsonResponse(resp)
