@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import socket
 import dj_database_url
-import django_on_heroku 
+#import django_on_heroku 
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,8 +25,7 @@ HOST_NAME = socket.gethostname()
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "CHANGE_ME!!!! (P.S. the SECRET_KEY environment variable will be used, if set, instead)."
-
+SECRET_KEY = os.environ.get("SECRET_KEY", "secret!!!111elf") 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -80,8 +79,9 @@ WSGI_APPLICATION = "gettingstarted.wsgi.application"
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 DATABASES = {
     "default": {
-        "ENGINE" : "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3")
+        dj_database_url(os.environ.get("DATABASE_URL", f"sqlite:////{BASE_DIR}/db.sqlite3"))
+        #"ENGINE" : "django.db.backends.sqlite3",
+        #"NAME": os.path.join(BASE_DIR, "db.sqlite3")
     }
 }
 
@@ -118,4 +118,4 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
-django_on_heroku.settings(locals())
+#django_on_heroku.settings(locals())
