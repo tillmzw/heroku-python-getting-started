@@ -9,7 +9,7 @@ from .models import Greeting
 
 # Create your views here.
 def index(request):
-    return HttpResponse(200) 
+    return JsonResponse({}) 
 
 
 def host(request):
