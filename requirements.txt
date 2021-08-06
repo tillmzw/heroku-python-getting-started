@@ -1,5 +1,4 @@
 django
 gunicorn
-#django-heroku # abandonware
-django-on-heroku
-
+dj-database-url
+psycopg2-binary
