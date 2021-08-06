@@ -37,7 +37,7 @@ def db(request):
     greeting = Greeting()
     greeting.save()
 
-    greetings_serialized = [g.serialize() for g in Greeting.objects.all()]
+    greetings_serialized = [g.serialize() for g in Greeting.objects.all().order_by("-when")]
 
     resp = {
         'count': len(greetings_serialized),
