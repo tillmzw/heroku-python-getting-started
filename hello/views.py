@@ -3,13 +3,18 @@ import random
 
 from django.conf import settings 
 from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
 
 from .models import Greeting
 
 # Create your views here.
 def index(request):
-    return HttpResponse(200) 
+    return JsonResponse({
+        "index": reverse("index"),
+        "host": reverse("host"),
+        "db": reverse("db")
+    }) 
 
 
 def host(request):
@@ -32,6 +37,11 @@ def db(request):
     greeting = Greeting()
     greeting.save()
 
-    greetings = Greeting.objects.all()
+    greetings_serialized = [g.serialize() for g in Greeting.objects.all().order_by("-when")]
 
-    return render(request, "db.html", {"greetings": greetings})
+    resp = {
+        'count': len(greetings_serialized),
+        'data': greetings_serialized
+    }
+
+    return JsonResponse(resp)
