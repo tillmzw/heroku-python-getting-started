@@ -29,7 +29,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "secret!!!111elf")
 DEBUG = os.environ.get("DEBUG", True)
 
 # FIXME: read the herokuapp.com domain somehow
-ALLOWED_HOSTS = ['*', 'localhost']
+if "HEROKU_APP_NAME" in os.environ:
+    # $HEROKU_APP_NAME is injected for all review stages and for any other build via the metadata feature:
+    # https://devcenter.heroku.com/articles/dyno-metadata
+    HEROKU_DOMAIN = f"{os.environ.get('HEROKU_APP_NAME')}.herokuapp.com"
+else:
+    HEROKU_DOMAIN = None
+
+ALLOWED_HOSTS = [HEROKU_DOMAIN, 'localhost']
 
 
 # Application definition
