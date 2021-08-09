@@ -29,7 +29,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "secret!!!111elf")
 DEBUG = os.environ.get("DEBUG", True)
 
 # FIXME: read the herokuapp.com domain somehow
-ALLOWED_HOSTS = ['*', 'localhost']
+if "HEROKU_PR_NUMBER" in os.environ:
+    HEROKU_DOMAIN = f"{os.environ.get('HEROKU_APP_NAME')}-pr-{os.environ.get('HEROKU_PR_NUMBER')}.herokuapp.com"
+elif "HEROKU_APP_NAME" in os.environ:
+    HEROKU_DOMAIN = f"{os.environ.get('HEROKU_APP_NAME')}.herokuapp.com"
+else:
+    HEROKU_DOMAIN = None
+
+ALLOWED_HOSTS = [HEROKU_DOMAIN, 'localhost']
 
 
 # Application definition
