@@ -47,3 +47,8 @@ class SimpleTest(TestCase):
         datas = response_j.get("data", [{}])
         data_element = datas[0]
         self.assertIn("when", data_element)
+        self.assertIn("exclamation", data_element)
+        self.assertIn("exclamation_lang", data_element)
+
+        self.assertIn(data_element.get("exclamation_lang"), ("GERMAN", "ENGLISH", "ROMONTSCH", "ITALIAN"))
+        self.assertIn(data_element.get("exclamation"), ("Hallo", "Hello", "Tgau", "Ciao"))

@@ -34,7 +34,7 @@ def host(request):
 
 def db(request):
 
-    greeting = Greeting()
+    greeting = Greeting.random()
     greeting.save()
 
     greetings_serialized = [g.serialize() for g in Greeting.objects.all().order_by("-when")]
