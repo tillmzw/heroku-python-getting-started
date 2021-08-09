@@ -42,13 +42,38 @@ class SimpleTest(TestCase):
         self.assertContains(response, "count")
         self.assertContains(response, "data")
 
+    def test_lang_none(self):
+        request = self.factory.get("/host")
+        request.user = AnonymousUser()
+        response = db(request)
+
         response_j = json.loads(response.content)
-        self.assertEqual(response_j.get("count", 0), 1)
+
         datas = response_j.get("data", [{}])
         data_element = datas[0]
         self.assertIn("when", data_element)
-        self.assertIn("exclamation", data_element)
-        self.assertIn("exclamation_lang", data_element)
+        self.assertEqual(None, data_element["exclamation"])
+        self.assertEqual(None, data_element["exclamation_lang"])
 
-        self.assertIn(data_element.get("exclamation_lang"), ("GERMAN", "ENGLISH", "ROMONTSCH", "ITALIAN"))
-        self.assertIn(data_element.get("exclamation"), ("Hallo", "Hello", "Tgau", "Ciao"))
+    def test_lang_all(self):
+        for i, lang in enumerate(Greeting.EXCLAMATION.names):
+            requested_lang = lang.lower()
+            expected_lang = Greeting.EXCLAMATION[lang]
+            request = self.factory.get("/host", {"language": requested_lang})
+            request.user = AnonymousUser()
+            response = db(request)
+
+            response_j = json.loads(response.content)
+            datas = response_j["data"]
+            # TODO: dont expect fixed ordering here
+            data_element = datas[::-1][i]
+            self.assertIn("when", data_element)
+            self.assertEqual(expected_lang.value, data_element["exclamation"])
+            self.assertEqual(expected_lang.name.lower(), data_element["exclamation_lang"])
+
+    def test_lang_unknown(self):
+        request = self.factory.get("/host", {"language": "Ankh-Morporkian"})
+        request.user = AnonymousUser()
+        response = db(request)
+
+        self.assertEqual(400, response.status_code)

@@ -13,18 +13,15 @@ class Greeting(models.Model):
         ITALIAN = "Ciao"
 
     when = models.DateTimeField("date created", auto_now_add=True)
-    exclamation = models.CharField(max_length=32, choices=EXCLAMATION.choices, default=EXCLAMATION.ENGLISH)
-
-    @classmethod
-    def random(cls):
-        greeting = cls()
-        greeting.exclamation = random.choice(cls.EXCLAMATION.values)
-        greeting.save()
-        return greeting
+    exclamation = models.CharField(max_length=32,
+                                   choices=EXCLAMATION.choices,
+                                   default=None,
+                                   null=True,
+                                   blank=True)
 
     def serialize(self):
         return {
             'when': self.when.isoformat(),
-            'exclamation': self.exclamation,
-            'exclamation_lang': Greeting.EXCLAMATION(self.exclamation).name
+            'exclamation': self.exclamation or None,
+            'exclamation_lang': Greeting.EXCLAMATION(self.exclamation).name.lower() if self.exclamation else None
         }
